@@ -11,7 +11,7 @@
     </Style>
   </Window.Resources>
   <Grid Margin="44,30,36,20" Background="Transparent"><Grid.ContextMenu><ContextMenu><MenuItem Header="All games" Click="AllClick"/><MenuItem Header="Favorites" Click="FavoritesClick"/><Separator/><MenuItem Header="Settings" Click="SettingsClick"/><MenuItem Header="Hide library" Click="CloseClick"/></ContextMenu></Grid.ContextMenu>
-    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
     <Grid>
       <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -25,12 +25,7 @@
       </Grid>
 
     </Grid>
-    <Grid Grid.Row="1" Margin="0,32,0,26">
-      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-      <StackPanel><TextBlock Text="Ready when you are." FontSize="38" FontWeight="SemiBold"/><TextBlock x:Name="Summary" Foreground="{StaticResource Muted}" FontSize="14" Margin="0,8,0,0"/></StackPanel>
-
-    </Grid>
-    <ListBox x:Name="Rows" Grid.Row="2" ItemContainerStyle="{StaticResource BareItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
+    <ListBox x:Name="Rows" Grid.Row="1" Margin="0,32,0,0" ItemContainerStyle="{StaticResource BareItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
       <ListBox.ItemTemplate><DataTemplate>
         <StackPanel Margin="0,0,0,25">
           <StackPanel Orientation="Horizontal" Margin="0,0,0,12"><TextBlock Text="{Binding Name}" FontSize="21" FontWeight="SemiBold"/><TextBlock Text="{Binding CountLabel}" Foreground="{StaticResource Muted}" Margin="12,6,0,0" FontSize="12"/></StackPanel>
@@ -49,13 +44,19 @@
 <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True"><Setter Property="Stroke" Value="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}"/></DataTrigger>
 <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True"><Setter Property="Stroke" Value="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}"/></DataTrigger>
 </Style.Triggers></Style></Path.Style></Path></Grid>
-                  <Border CornerRadius="{Binding TextPanelCorners}" Padding="10,16,10,10">
-                    <Border.Background><SolidColorBrush Color="Black" Opacity="0.5"/></Border.Background>
-                    <StackPanel>
+                  <Grid>
+                    <Border CornerRadius="{Binding TextPanelCorners}" Margin="{Binding TextPanelOverlap}" RenderTransformOrigin="0.5,1" IsHitTestVisible="False">
+                      <Border.Style><Style TargetType="Border"><Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                          <Setter Property="RenderTransform"><Setter.Value><ScaleTransform ScaleX="1.06" ScaleY="1"/></Setter.Value></Setter>
+                        </DataTrigger>
+                      </Style.Triggers></Style></Border.Style>
+                    <Border.Background><SolidColorBrush Color="Black" Opacity="0.5"/></Border.Background></Border>
+                    <StackPanel Margin="10,16,10,10">
                       <TextBlock Text="{Binding Game.Name}" FontWeight="SemiBold" FontSize="13" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
                       <TextBlock Text="{Binding Detail}" Foreground="{StaticResource Muted}" FontSize="11" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
                     </StackPanel>
-                  </Border>
+                  </Grid>
                 </StackPanel>
               </Button>
             </DataTemplate></ListBox.ItemTemplate>
@@ -63,7 +64,7 @@
         </StackPanel>
       </DataTemplate></ListBox.ItemTemplate>
     </ListBox>
-    <TextBlock x:Name="Empty" Grid.Row="2" Text="No games here yet. Add a Steam folder or a custom game in Settings." Foreground="{StaticResource Muted}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
-    <DockPanel Grid.Row="3" Margin="0,14,0,0"><local:InputHints DockPanel.Dock="Right" x:Name="ShortcutHint" TextElement.Foreground="{StaticResource Muted}"/><TextBlock x:Name="StatusText" VerticalAlignment="Center" Foreground="{StaticResource Muted}" FontSize="11" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="0,0,20,0"/></DockPanel>
+    <TextBlock x:Name="Empty" Grid.Row="1" Text="No games here yet. Add a Steam folder or a custom game in Settings." Foreground="{StaticResource Muted}" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+    <DockPanel Grid.Row="2" Margin="0,14,0,0"><local:InputHints DockPanel.Dock="Right" x:Name="ShortcutHint" TextElement.Foreground="{StaticResource Muted}"/><TextBlock x:Name="StatusText" VerticalAlignment="Center" Foreground="{StaticResource Muted}" FontSize="11" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Margin="0,0,20,0"/></DockPanel>
   </Grid>
 </Window>

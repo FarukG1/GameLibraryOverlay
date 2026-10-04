@@ -14,6 +14,7 @@ public sealed record GameCard(Game Game, GamePreferences? Preference, double Wid
     public double SelectionStrokeThickness => BorderThickness * 2;
     public Rect CoverRect => new(0, 0, Width, CoverHeight);
     public CornerRadius TextPanelCorners => new(0, 0, CornerRadius, CornerRadius);
+    public Thickness TextPanelOverlap => new(0, -Math.Max(1, CornerRadius), 0, 0);
     public double CoverHeight => Wide ? Width * 9 / 16 : Width * 1.4;
     public bool UsesHero => Wide && Game.WideCoverPath is null && Game.BackgroundPath is not null;
     public string? CoverPath => Wide ? UsesHero ? Game.BackgroundPath : Game.WideCoverPath ?? Preference?.CoverPath ?? Game.CoverPath : Preference?.CoverPath ?? Game.CoverPath;
@@ -136,7 +137,6 @@ public partial class OverlayWindow : Window
         cardIndex = rows.Count > 0 ? Math.Max(0, rows[rowIndex].Cards.FindIndex(c => c.Game.Id == previousId)) : 0;
         Rows.ItemsSource = rows;
         Empty.Visibility = rows.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
-        Summary.Text = $"{app.Games.Count} titles · Steam & your games · One place to play";
         StatusText.Text = app.Status;
         if (IsActive && !Search.IsKeyboardFocusWithin) QueueFocus();
     }
