@@ -276,7 +276,7 @@ public partial class App : Application
         var editor = settingsWindow;
         editor?.ExerciseAppearanceInputs();
         if (editor is not null) await editor.SaveAsync();
-        var numericValuesSaved = Math.Abs(Settings.BackgroundOpacity - 0.735) < 0.00001 && Math.Abs(Settings.CardWidth - 160.5) < 0.00001 && Math.Abs(Settings.CoverCornerRadius - 18.5) < 0.00001;
+        var numericValuesSaved = Math.Abs(Settings.BackgroundOpacity - 0.735) < 0.00001 && Math.Abs(Settings.CardWidth - 160.5) < 0.00001 && Math.Abs(Settings.CoverCornerRadius - 18.5) < 0.00001 && Math.Abs(Store.LoadSettings().SelectionBorderThickness - 3.5) < 0.00001;
         if (!numericValuesSaved) throw new InvalidOperationException("Smoke test: manually entered appearance values were not saved.");
         var selectionColorSaved = !Settings.UseWindowsAccentColor && Store.LoadSettings().SelectionColor == "#4080F0" &&
             overlay?.FindResource(System.Windows.SystemColors.AccentColorBrushKey) is System.Windows.Media.SolidColorBrush selectionBrush && selectionBrush.Color.ToString() == "#FF4080F0";

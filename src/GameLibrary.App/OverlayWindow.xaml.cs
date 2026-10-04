@@ -8,8 +8,10 @@ using GameLibrary.Core;
 
 namespace GameLibrary.App;
 
-public sealed record GameCard(Game Game, GamePreferences? Preference, double Width, bool Wide = false, double CornerRadius = 12)
+public sealed record GameCard(Game Game, GamePreferences? Preference, double Width, bool Wide = false, double CornerRadius = 12, double BorderThickness = 2)
 {
+    // The shared cover clip removes the outer half of the centered outline.
+    public double SelectionStrokeThickness => BorderThickness * 2;
     public Rect CoverRect => new(0, 0, Width, CoverHeight);
     public double CoverHeight => Wide ? Width * 9 / 16 : Width * 1.4;
     public bool UsesHero => Wide && Game.WideCoverPath is null && Game.BackgroundPath is not null;
@@ -108,7 +110,7 @@ public partial class OverlayWindow : Window
     {
         var term = Search.Text.Trim();
         var cards = app.Games.Where(g => string.IsNullOrEmpty(term) || g.Name.Contains(term, StringComparison.CurrentCultureIgnoreCase))
-            .Select(g => new GameCard(g, app.Settings.Games.GetValueOrDefault(g.Id), app.Settings.CardWidth, CornerRadius: app.Settings.CoverCornerRadius)).ToList();
+            .Select(g => new GameCard(g, app.Settings.Games.GetValueOrDefault(g.Id), app.Settings.CardWidth, CornerRadius: app.Settings.CoverCornerRadius, BorderThickness: app.Settings.SelectionBorderThickness)).ToList();
         if (favoritesOnly) cards = cards.Where(c => c.Preference?.Favorite == true).ToList();
         var previousId = userNavigated ? SelectedCard?.Game.Id : null;
         var previousRow = userNavigated ? rows.ElementAtOrDefault(rowIndex)?.Name : null;

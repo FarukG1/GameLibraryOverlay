@@ -27,6 +27,7 @@ public sealed class SettingsService
             throw new InvalidDataException("Settings contain duplicate custom game IDs. File left unchanged.");
         value.CardWidth = double.IsFinite(value.CardWidth) ? Math.Clamp(value.CardWidth, 110, 240) : 156;
         value.CoverCornerRadius = double.IsFinite(value.CoverCornerRadius) ? Math.Clamp(value.CoverCornerRadius, 0, 40) : 12;
+        value.SelectionBorderThickness = double.IsFinite(value.SelectionBorderThickness) ? Math.Clamp(value.SelectionBorderThickness, 0, 10) : 2;
         if (value.SelectionColor is not { Length: 7 } color || color[0] != '#' ||
             !uint.TryParse(color.AsSpan(1), System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture, out _))
             value.SelectionColor = "#CCF578";

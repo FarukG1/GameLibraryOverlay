@@ -25,7 +25,8 @@ public sealed class SettingsWindow : Window
     private readonly Slider opacity = new() { Minimum = 0.25, Maximum = 1, SmallChange = 0.01, LargeChange = 0.1 };
     private readonly Slider cardSize = new() { Minimum = 110, Maximum = 240, SmallChange = 1, LargeChange = 10 };
     private readonly Slider cornerRadius = new() { Minimum = 0, Maximum = 40, SmallChange = 1, LargeChange = 5 };
-    private NumericSlider opacityEditor = null!, sizeEditor = null!, radiusEditor = null!;
+    private readonly Slider borderThickness = new() { Minimum = 0, Maximum = 10, SmallChange = 0.5, LargeChange = 1 };
+    private NumericSlider opacityEditor = null!, sizeEditor = null!, radiusEditor = null!, thicknessEditor = null!;
     private readonly TextBox hotkey = new() { IsReadOnly = true };
     private uint hotkeyModifiers, hotkeyKey;
     private readonly ListBox customList = new() { DisplayMemberPath = "Name", MinHeight = 200 };
@@ -92,6 +93,7 @@ public sealed class SettingsWindow : Window
         opacity.Value = draft.BackgroundOpacity; opacityEditor = new NumericSlider(opacity, 100, "%"); Field(panel, "Background opacity", opacityEditor);
         cardSize.Value = draft.CardWidth; sizeEditor = new NumericSlider(cardSize, 1, "px"); Field(panel, "Cover size", sizeEditor);
         cornerRadius.Value = draft.CoverCornerRadius; radiusEditor = new NumericSlider(cornerRadius, 1, "px"); Field(panel, "Cover corner radius (0 = square)", radiusEditor);
+        borderThickness.Value = draft.SelectionBorderThickness; thicknessEditor = new NumericSlider(borderThickness, 1, "px"); Field(panel, "Selection border thickness (0 = hidden)", thicknessEditor);
         windowsAccent.IsChecked = draft.UseWindowsAccentColor;
         panel.Children.Add(windowsAccent);
         var colorRow = new StackPanel { Orientation = Orientation.Horizontal };
@@ -220,7 +222,7 @@ public sealed class SettingsWindow : Window
     {
         try
         {
-            opacityEditor.Validate(); sizeEditor.Validate(); radiusEditor.Validate();
+            opacityEditor.Validate(); sizeEditor.Validate(); radiusEditor.Validate(); thicknessEditor.Validate();
             SaveCustom();
             draft.SteamDirectory = NullIfEmpty(steam.Text); draft.SteamUserId = NullIfEmpty(steamUser.Text);
             if (draft.SteamDirectory is not null && !Directory.Exists(draft.SteamDirectory)) throw new InvalidOperationException("The Steam installation folder does not exist.");
@@ -231,6 +233,7 @@ public sealed class SettingsWindow : Window
             draft.MonitorDevice = NullIfEmpty((string?)((ComboBoxItem?)monitor.SelectedItem)?.Tag);
             draft.Translucent = translucent.IsChecked == true; draft.BackgroundOpacity = opacity.Value; draft.CardWidth = cardSize.Value;
             draft.CoverCornerRadius = cornerRadius.Value;
+            draft.SelectionBorderThickness = borderThickness.Value;
             draft.UseWindowsAccentColor = windowsAccent.IsChecked == true;
             if (!TrySelectionColor(out var chosenColor) && !draft.UseWindowsAccentColor)
                 throw new InvalidOperationException("Enter a selection color as #RRGGBB, or use Choose color.");
@@ -257,6 +260,7 @@ public sealed class SettingsWindow : Window
         opacityEditor.EnterNumber(73.5);
         sizeEditor.EnterNumber(160.5);
         radiusEditor.EnterNumber(18.5);
+        thicknessEditor.EnterNumber(3.5);
         windowsAccent.IsChecked = false;
         selectionColor.Text = "#4080F0";
     }
