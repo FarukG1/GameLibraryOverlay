@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets/library.ico</ApplicationIcon>
+    <AssemblyName>GameLibrary</AssemblyName>
+    <RootNamespace>GameLibrary.App</RootNamespace>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../GameLibrary.Infrastructure/GameLibrary.Infrastructure.csproj" />
+    <EmbeddedResource Include="Assets/library.ico" />
+    <Resource Include="Assets/Input/*.png" />
+  </ItemGroup>
+</Project>
