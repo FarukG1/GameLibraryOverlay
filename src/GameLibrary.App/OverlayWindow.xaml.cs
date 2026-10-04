@@ -13,6 +13,7 @@ public sealed record GameCard(Game Game, GamePreferences? Preference, double Wid
     // The shared cover clip removes the outer half of the centered outline.
     public double SelectionStrokeThickness => BorderThickness * 2;
     public Rect CoverRect => new(0, 0, Width, CoverHeight);
+    public CornerRadius TextPanelCorners => new(0, 0, CornerRadius, CornerRadius);
     public double CoverHeight => Wide ? Width * 9 / 16 : Width * 1.4;
     public bool UsesHero => Wide && Game.WideCoverPath is null && Game.BackgroundPath is not null;
     public string? CoverPath => Wide ? UsesHero ? Game.BackgroundPath : Game.WideCoverPath ?? Preference?.CoverPath ?? Game.CoverPath : Preference?.CoverPath ?? Game.CoverPath;

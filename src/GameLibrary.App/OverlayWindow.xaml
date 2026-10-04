@@ -40,7 +40,7 @@
               <Button Width="{Binding Width}" Focusable="False" Padding="0" Margin="0" Background="Transparent" Click="GameClick" ContextMenuOpening="GameContextMenu" ToolTip="{Binding Tooltip}">
                 <Button.Template><ControlTemplate TargetType="Button"><ContentPresenter/></ControlTemplate></Button.Template><Button.ContextMenu><ContextMenu/></Button.ContextMenu>
                 <StackPanel>
-                  <Grid x:Name="CoverArtwork" Height="{Binding CoverHeight}" RenderTransformOrigin="0.5,0.5"><Grid.Clip><RectangleGeometry Rect="{Binding CoverRect}" RadiusX="{Binding CornerRadius}" RadiusY="{Binding CornerRadius}"/></Grid.Clip><Grid.Style><Style TargetType="Grid"><Setter Property="RenderTransform"><Setter.Value><ScaleTransform ScaleX="1" ScaleY="1"/></Setter.Value></Setter><Style.Triggers><DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True"><Setter Property="RenderTransform"><Setter.Value><ScaleTransform ScaleX="1.06" ScaleY="1.06"/></Setter.Value></Setter></DataTrigger></Style.Triggers></Style></Grid.Style><Grid Background="#263241">
+                  <Grid x:Name="CoverArtwork" Panel.ZIndex="1" Height="{Binding CoverHeight}" RenderTransformOrigin="0.5,0.5"><Grid.Clip><RectangleGeometry Rect="{Binding CoverRect}" RadiusX="{Binding CornerRadius}" RadiusY="{Binding CornerRadius}"/></Grid.Clip><Grid.Style><Style TargetType="Grid"><Setter Property="RenderTransform"><Setter.Value><ScaleTransform ScaleX="1" ScaleY="1"/></Setter.Value></Setter><Style.Triggers><DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True"><Setter Property="RenderTransform"><Setter.Value><ScaleTransform ScaleX="1.06" ScaleY="1.06"/></Setter.Value></Setter></DataTrigger></Style.Triggers></Style></Grid.Style><Grid Background="#263241">
                     <StackPanel VerticalAlignment="Center" Margin="15"><TextBlock Text="{Binding Initial}" FontSize="52" FontWeight="Light" Foreground="#70829A" HorizontalAlignment="Center"/><TextBlock Text="{Binding Game.Name}" TextAlignment="Center" Foreground="#B6C4D6" Margin="0,10,0,0"/></StackPanel>
                     <local:CoverImage CoverPath="{Binding CoverPath}" Stretch="{Binding ImageStretch}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <local:CoverImage CoverPath="{Binding LogoPath}" Stretch="Uniform" Width="{Binding LogoWidth}" MaxHeight="95" Margin="16" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
@@ -49,8 +49,13 @@
 <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True"><Setter Property="Stroke" Value="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}"/></DataTrigger>
 <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True"><Setter Property="Stroke" Value="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}"/></DataTrigger>
 </Style.Triggers></Style></Path.Style></Path></Grid>
-                  <TextBlock Text="{Binding Game.Name}" FontWeight="SemiBold" FontSize="13" Margin="2,16,0,0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-                  <TextBlock Text="{Binding Detail}" Foreground="{StaticResource Muted}" FontSize="11" Margin="2,4,0,0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                  <Border CornerRadius="{Binding TextPanelCorners}" Padding="10,16,10,10">
+                    <Border.Background><SolidColorBrush Color="Black" Opacity="0.5"/></Border.Background>
+                    <StackPanel>
+                      <TextBlock Text="{Binding Game.Name}" FontWeight="SemiBold" FontSize="13" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                      <TextBlock Text="{Binding Detail}" Foreground="{StaticResource Muted}" FontSize="11" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+                    </StackPanel>
+                  </Border>
                 </StackPanel>
               </Button>
             </DataTemplate></ListBox.ItemTemplate>
