@@ -56,6 +56,8 @@ public sealed class Settings
     public double BackgroundOpacity { get; set; } = 0.87;
     public double CardWidth { get; set; } = 156;
     public double CoverCornerRadius { get; set; } = 12;
+    public bool UseWindowsAccentColor { get; set; } = true;
+    public string SelectionColor { get; set; } = "#CCF578";
     public bool RestoreAfterExit { get; set; } = true;
     public uint HotkeyModifiers { get; set; } = 3; // Control + Alt
     public uint HotkeyKey { get; set; } = 0x47; // G

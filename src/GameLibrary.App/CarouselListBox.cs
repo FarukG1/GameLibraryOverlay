@@ -20,7 +20,7 @@ public sealed class CarouselListBox : ListBox
             container.Margin = new Thickness(0, 0, ReferenceEquals(item, Items[Items.Count - 1]) ? TailWidth(card) : 14, 0);
     }
 
-    private double TailWidth(GameCard card) => Math.Max(14, (Viewer?.ViewportWidth ?? ActualWidth) - card.Width - 24);
+    private double TailWidth(GameCard card) => Math.Max(14, (Viewer?.ViewportWidth ?? ActualWidth) - card.Width - 48);
     private void UpdateTail()
     {
         if (Items.Count > 0 && Items[Items.Count - 1] is GameCard card &&

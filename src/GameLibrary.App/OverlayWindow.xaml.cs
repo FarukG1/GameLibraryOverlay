@@ -55,6 +55,10 @@ public partial class OverlayWindow : Window
                 var list = Descendants(Rows).OfType<CarouselListBox>().First(l => ReferenceEquals(l.DataContext, rows[r]));
                 var item = (ListBoxItem)list.ItemContainerGenerator.ContainerFromIndex(index);
                 var x = item.TranslatePoint(new Point(), list).X;
+                var artwork = Descendants(item).OfType<Grid>().First(g => g.Name == "CoverArtwork");
+                var coverBounds = artwork.TransformToAncestor(list).TransformBounds(new Rect(artwork.RenderSize));
+                if (coverBounds.Left < 4 || coverBounds.Right > list.ActualWidth - 4)
+                    throw new InvalidOperationException($"Selected cover is clipped: {coverBounds}, viewport={list.ActualWidth}.");
                 if (anchor is { } expected && Math.Abs(x - expected) > 2)
                     throw new InvalidOperationException($"Carousel anchor moved: row={r}, index={index}, x={x}, expected={expected}, {list.Diagnostics}.");
                 anchor ??= x;
@@ -74,6 +78,14 @@ public partial class OverlayWindow : Window
         this.app = app;
         AllowsTransparency = app.Settings.Translucent;
         InitializeComponent();
+        // The system resource follows Windows accent changes automatically. Scope
+        // a manual override to this window when the user opts out.
+        if (!app.Settings.UseWindowsAccentColor)
+        {
+            var selectionBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(app.Settings.SelectionColor));
+            selectionBrush.Freeze();
+            Resources[SystemColors.AccentColorBrushKey] = selectionBrush;
+        }
         ShortcutHint.Configure(app.Settings);
         SizeChanged += (_, _) => ShortcutHint.MaxWidth = Math.Max(200, ActualWidth - 120);
         gamepad = new GamepadService(action => { InputMode.Current.UseGamepad(); HandleNavigation(action); });
@@ -105,7 +117,7 @@ public partial class OverlayWindow : Window
         void Add(string name, IEnumerable<GameCard> values, bool wide = false)
         {
             var list = values.Select(c => wide ? c with { Width = app.Settings.CardWidth * 2, Wide = true } : c).ToList();
-            if (list.Count > 0) rows.Add(new(name, list, list[0].CoverHeight + 109));
+            if (list.Count > 0) rows.Add(new(name, list, list[0].CoverHeight + 117));
         }
         if (term.Length > 0) Add("Search results", cards);
         else if (favoritesOnly) Add("Favorites", cards);

@@ -278,6 +278,9 @@ public partial class App : Application
         if (editor is not null) await editor.SaveAsync();
         var numericValuesSaved = Math.Abs(Settings.BackgroundOpacity - 0.735) < 0.00001 && Math.Abs(Settings.CardWidth - 160.5) < 0.00001 && Math.Abs(Settings.CoverCornerRadius - 18.5) < 0.00001;
         if (!numericValuesSaved) throw new InvalidOperationException("Smoke test: manually entered appearance values were not saved.");
+        var selectionColorSaved = !Settings.UseWindowsAccentColor && Store.LoadSettings().SelectionColor == "#4080F0" &&
+            overlay?.FindResource(System.Windows.SystemColors.AccentColorBrushKey) is System.Windows.Media.SolidColorBrush selectionBrush && selectionBrush.Color.ToString() == "#FF4080F0";
+        if (!selectionColorSaved) throw new InvalidOperationException("Smoke test: custom selection color was not saved or applied.");
         var settingsStayedOpen = ReferenceEquals(editor, settingsWindow) && settingsWindow?.IsVisible == true;
         if (!settingsStayedOpen) throw new InvalidOperationException("Smoke test: saving closed Settings.");
         if (settingsWindow is not null)
@@ -296,7 +299,7 @@ public partial class App : Application
         {
             games = testedGameCount, realizedCards = cardCount, overlayClosed = overlay is null, secondInstanceExited,
             withinWorkArea, firstGameSelected = firstHasFocus, navigationMoved, controllerPausedForSettings, settingsStayedOpen, numericValuesSaved,
-            controllerScrollbarsHidden, scrollbarHoverOnly,
+            controllerScrollbarsHidden, scrollbarHoverOnly, selectionColorSaved,
             workingSetBytes = Process.GetCurrentProcess().WorkingSet64, status = Status
         }, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
         Shutdown();
