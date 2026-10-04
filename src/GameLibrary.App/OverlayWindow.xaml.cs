@@ -11,7 +11,6 @@ namespace GameLibrary.App;
 public sealed record GameCard(Game Game, GamePreferences? Preference, double Width, bool Wide = false, double CornerRadius = 12)
 {
     public Rect CoverRect => new(0, 0, Width, CoverHeight);
-    public CornerRadius CoverCorners => new(CornerRadius);
     public double CoverHeight => Wide ? Width * 9 / 16 : Width * 1.4;
     public bool UsesHero => Wide && Game.WideCoverPath is null && Game.BackgroundPath is not null;
     public string? CoverPath => Wide ? UsesHero ? Game.BackgroundPath : Game.WideCoverPath ?? Preference?.CoverPath ?? Game.CoverPath : Preference?.CoverPath ?? Game.CoverPath;
