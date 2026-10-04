@@ -58,7 +58,9 @@ public sealed class InputHints : WrapPanel
         {
             var bitmap = new BitmapImage(uri);
             bitmap.Freeze();
-            var image = new Image { Source = bitmap, Width = 32, Height = 32, Stretch = Stretch.Uniform, ToolTip = label };
+            var artwork = TrimPadding(bitmap);
+            var image = new Image { Source = artwork, Width = 24.0 * artwork.PixelWidth / artwork.PixelHeight, Height = 24,
+                Margin = new Thickness(4), VerticalAlignment = VerticalAlignment.Center, Stretch = Stretch.Uniform, ToolTip = label };
             AutomationProperties.SetName(image, label);
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.HighQuality);
             return image;
@@ -67,7 +69,26 @@ public sealed class InputHints : WrapPanel
         {
             // Uncommon configurable keys still have a readable native keycap.
             return new Border { Child = Label(label), BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(1),
-                CornerRadius = new CornerRadius(3), Padding = new Thickness(4, 1, 5, 1), Margin = new Thickness(4), VerticalAlignment = VerticalAlignment.Center };
+                CornerRadius = new CornerRadius(3), Height = 24, Padding = new Thickness(4, 1, 5, 1), Margin = new Thickness(4), VerticalAlignment = VerticalAlignment.Center };
         }
+    }
+
+    private static BitmapSource TrimPadding(BitmapSource source)
+    {
+        // The upstream PNGs share a square canvas, but wide modifiers have shorter
+        // artwork inside it. Size the visible keycap, not its transparent canvas.
+        var pixelsSource = new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
+        var stride = source.PixelWidth * 4;
+        var pixels = new byte[stride * source.PixelHeight];
+        pixelsSource.CopyPixels(pixels, stride, 0);
+        var left = source.PixelWidth; var top = source.PixelHeight; var right = -1; var bottom = -1;
+        for (var y = 0; y < source.PixelHeight; y++)
+            for (var x = 0; x < source.PixelWidth; x++)
+                if (pixels[y * stride + x * 4 + 3] != 0)
+                { left = Math.Min(left, x); top = Math.Min(top, y); right = Math.Max(right, x); bottom = Math.Max(bottom, y); }
+        if (right < left) return source;
+        var cropped = new CroppedBitmap(source, new Int32Rect(left, top, right - left + 1, bottom - top + 1));
+        cropped.Freeze();
+        return cropped;
     }
 }
