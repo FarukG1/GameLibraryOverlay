@@ -122,3 +122,7 @@ Use an isolated data directory so verification cannot alter normal preferences. 
 Smoke mode reads the real Steam library, exercises second-instance forwarding, renders overlay/settings PNGs, and checks closing the overlay. Stress mode substitutes 5,000 in-memory entries. Neither launches a real game. The test suite uses only its own `TestGame.exe` for launch/exit verification.
 
 Manual release checks: tray actions and start-with-Windows; shortcut conflict feedback; custom launcher handoffs; mixed-DPI monitor changes; game focus restoration; Wallpaper Engine composition; and GPU use with the overlay closed.
+
+### Background performance capture
+
+Run `./measure-resources.ps1` while Game Library is running. It samples the app process every second for ten minutes and writes `samples.csv`, a cumulative `report.md`, and checkpoint reports at 30, 60, 90, 300, and 600 seconds under `artifacts/performance-<timestamp>`. Each checkpoint also summarizes the interval since the previous one. CPU is normalized across the PC's logical processors; the CSV also provides one-core utilization. RAM means resident working set, while private commit is allocated memory. GPU and game frame times are not measured. The sampler stops if the original app process exits, rather than attaching to another process.
