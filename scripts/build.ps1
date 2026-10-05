@@ -40,5 +40,10 @@ if ($Publish) {
     # Archive the directory contents so GameLibrary.exe is at the ZIP root.
     $archivePath = $publishDirectory + '.zip'
     Compress-Archive -Path (Join-Path $publishDirectory '*') -DestinationPath $archivePath -Force
+    $checksumPath = $archivePath + '.sha256'
+    $checksum = (Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash.ToLowerInvariant()
+    $checksumLine = $checksum + '  ' + [IO.Path]::GetFileName($archivePath)
+    [IO.File]::WriteAllText($checksumPath, $checksumLine + "`n", [Text.Encoding]::ASCII)
     Write-Output "Release archive: $archivePath"
+    Write-Output "SHA-256 checksum: $checksumPath"
 }

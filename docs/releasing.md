@@ -49,11 +49,14 @@ future releases.
 
 ```powershell
 .\scripts\build.ps1 -Test -Publish
-Get-FileHash artifacts/GameLibraryOverlay_v2026.10.1.zip -Algorithm SHA256
+Get-Content artifacts/GameLibraryOverlay_v2026.10.1.zip.sha256
 ```
 
 In GitHub Releases, choose tag `v2026.10.1`, title `Game Library 2026.10.1`,
-and upload **GameLibraryOverlay_v2026.10.1.zip**. Publish the SHA-256 hash in the
+and upload **GameLibraryOverlay_v2026.10.1.zip** and
+**GameLibraryOverlay_v2026.10.1.zip.sha256**. Publishing generates the checksum
+file automatically beside the ZIP, outside the three-file application bundle.
+It contains the ZIP's SHA-256 hash and filename. Publish the hash in the
 release notes, along with the Windows and .NET 10 Windows Desktop Runtime
 requirements. GitHub automatically supplies source archives from the tag.
 The ZIP is a portable framework-dependent application, not an installer.

@@ -32,6 +32,9 @@ Publishing also creates `artifacts/GameLibraryOverlay_vYYYY.MM.X.zip` with the
 files directly at the archive root, including the licenses. Repeating `-Publish`
 replaces the same version's ZIP.
 
+`-Publish` also writes `GameLibraryOverlay_vYYYY.MM.X.zip.sha256` beside the ZIP,
+containing its SHA-256 hash and filename. Upload both files to GitHub Releases.
+
 The release targets Windows x64 only. Single-file publishing bundles application
 DLLs into `GameLibrary.exe` and omits debugging symbols. The ZIP contains exactly
 `GameLibrary.exe`, `LICENSE`, and `THIRD_PARTY_NOTICES.md` at its root.
