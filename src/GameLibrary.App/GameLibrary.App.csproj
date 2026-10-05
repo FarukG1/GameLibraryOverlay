@@ -13,5 +13,8 @@
     <ProjectReference Include="../GameLibrary.Infrastructure/GameLibrary.Infrastructure.csproj" />
     <EmbeddedResource Include="Assets/library.ico" />
     <Resource Include="Assets/Input/*.png" />
+    <Content Include="../../LICENSE" Link="LICENSE" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="../../THIRD_PARTY_NOTICES.md" Link="THIRD_PARTY_NOTICES.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Assets/Input/LICENSE.txt" Link="INPUT_ASSETS_LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

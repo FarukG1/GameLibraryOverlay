@@ -1,10 +1,13 @@
+# Resolve paths from the checkout rather than the current working directory.
+$RepositoryRoot = Split-Path -Parent $PSScriptRoot
 $ErrorActionPreference = 'Stop'
-Set-Location -LiteralPath $PSScriptRoot
-$exe = Join-Path $PSScriptRoot 'artifacts\app\GameLibrary.exe'
-if (-not (Test-Path -LiteralPath $exe)) { throw 'Run .\build.ps1 -Test -Publish first.' }
+Set-Location -LiteralPath $RepositoryRoot
+. (Join-Path $PSScriptRoot 'Get-PublishDirectory.ps1')
+$exe = Join-Path (Get-PublishDirectory -RepositoryRoot $RepositoryRoot) 'GameLibrary.exe'
+if (-not (Test-Path -LiteralPath $exe)) { throw 'Run .\scripts\build.ps1 -Test -Publish first.' }
 if (Get-Process -Name GameLibrary -ErrorAction SilentlyContinue) { throw 'Exit Game Library from its tray menu before UI verification.' }
 foreach ($mode in @('local', 'stress', 'idle')) {
-    $dataPath = Join-Path $PSScriptRoot ('artifacts\verify-' + $mode)
+    $dataPath = Join-Path $RepositoryRoot ('artifacts\verify-' + $mode)
     $launchArgs = @('--data-dir', ('"' + $dataPath + '"'))
     if ($mode -eq 'idle') { $launchArgs += @('--background', '--idle-diagnostics') }
     else { $launchArgs += '--smoke-test' }

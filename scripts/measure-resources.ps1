@@ -1,13 +1,16 @@
 param(
     [int]$TargetProcessId,
-    [string]$OutputDirectory = (Join-Path $PSScriptRoot ('artifacts\performance-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))),
+    [string]$OutputDirectory = (Join-Path (Split-Path -Parent $PSScriptRoot) ('artifacts\performance-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))),
     [int[]]$Checkpoints = @(30, 60, 90, 300, 600)
 )
+# Resolve paths from the checkout rather than the current working directory.
+$RepositoryRoot = Split-Path -Parent $PSScriptRoot
 $ErrorActionPreference = 'Stop'
 $Checkpoints = @($Checkpoints | Where-Object { $_ -gt 0 } | Sort-Object -Unique)
 if (-not $Checkpoints.Count) { throw 'Provide at least one positive checkpoint.' }
 if (-not $TargetProcessId) {
-    $exe = Join-Path $PSScriptRoot 'artifacts\app\GameLibrary.exe'
+    . (Join-Path $PSScriptRoot 'Get-PublishDirectory.ps1')
+    $exe = Join-Path (Get-PublishDirectory -RepositoryRoot $RepositoryRoot) 'GameLibrary.exe'
     $target = @(Get-Process GameLibrary -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq $exe })
     if ($target.Count -ne 1) { throw 'Open Game Library first, or specify -TargetProcessId.' }
     $TargetProcessId = $target[0].Id
