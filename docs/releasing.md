@@ -43,7 +43,7 @@ release counter that increments for every release and never resets. For example:
 
 Publishing creates the release ZIP automatically beside the published folder.
 
-The build includes all three license/notice files automatically. The folder name
+The build includes the project license and third-party notice automatically. The folder name
 tracks the version in `Directory.Build.props`; update the example version for
 future releases.
 
@@ -63,8 +63,13 @@ Do not upload test fixtures, logs, screenshots from real libraries, package
 caches, `bin/`, `obj/`, or the entire `artifacts/` folder.
 
 Keep the complete `artifacts/GameLibraryOverlay_v2026.10.1` directory together. Include the project license,
-third-party notices, and asset license alongside distributed packages. The current
+third-party notices (including the artwork license) alongside distributed packages. The current
 build requires the .NET 10 Windows Desktop Runtime.
 
 Write release notes describing actual changes, requirements, limitations, and
 validation. Test on a clean Windows environment before publishing.
+
+The release targets Windows x64 only. Single-file publishing bundles application
+DLLs into `GameLibrary.exe` and omits debugging symbols. The ZIP contains exactly
+`GameLibrary.exe`, `LICENSE`, and `THIRD_PARTY_NOTICES.md` at its root.
+The x64 .NET 10 Windows Desktop Runtime is required.

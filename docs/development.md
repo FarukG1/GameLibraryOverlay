@@ -52,7 +52,7 @@ windows and uses isolated preferences. See [diagnostics](performance-and-diagnos
 
 The publish directory is `artifacts/GameLibraryOverlay_vYYYY.MM.X`, using the
 version in `Directory.Build.props`. Build and publish output automatically include
-`LICENSE`, `THIRD_PARTY_NOTICES.md`, and `INPUT_ASSETS_LICENSE.txt`.
+`LICENSE` and `THIRD_PARTY_NOTICES.md`.
 
 | Location | Contents |
 | --- | --- |
@@ -76,3 +76,8 @@ because it needs a Windows desktop.
 Publishing also creates `artifacts/GameLibraryOverlay_vYYYY.MM.X.zip` with the
 files directly at the archive root, including the licenses. Repeating `-Publish`
 replaces the same version's ZIP.
+
+The release targets Windows x64 only. Single-file publishing bundles application
+DLLs into `GameLibrary.exe` and omits debugging symbols. The ZIP contains exactly
+`GameLibrary.exe`, `LICENSE`, and `THIRD_PARTY_NOTICES.md` at its root.
+The x64 .NET 10 Windows Desktop Runtime is required.

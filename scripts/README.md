@@ -31,3 +31,8 @@ Publishing uses `artifacts/GameLibraryOverlay_vYYYY.MM.X`, read from
 Publishing also creates `artifacts/GameLibraryOverlay_vYYYY.MM.X.zip` with the
 files directly at the archive root, including the licenses. Repeating `-Publish`
 replaces the same version's ZIP.
+
+The release targets Windows x64 only. Single-file publishing bundles application
+DLLs into `GameLibrary.exe` and omits debugging symbols. The ZIP contains exactly
+`GameLibrary.exe`, `LICENSE`, and `THIRD_PARTY_NOTICES.md` at its root.
+The x64 .NET 10 Windows Desktop Runtime is required.

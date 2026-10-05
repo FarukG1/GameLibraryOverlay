@@ -72,3 +72,8 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup and review expectations.
 See [LICENSE](LICENSE) for the GNU Affero General Public License, version 3.
 Bundled input prompts are Kenney CC0 artwork; see
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution.
+
+The release targets Windows x64 only. Single-file publishing bundles application
+DLLs into `GameLibrary.exe` and omits debugging symbols. The ZIP contains exactly
+`GameLibrary.exe`, `LICENSE`, and `THIRD_PARTY_NOTICES.md` at its root.
+The x64 .NET 10 Windows Desktop Runtime is required.

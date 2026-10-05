@@ -19,7 +19,23 @@ if ($Test) {
 if ($Publish) {
     . (Join-Path $PSScriptRoot 'Get-PublishDirectory.ps1')
     $publishDirectory = Get-PublishDirectory -RepositoryRoot $RepositoryRoot
-    & $sdk publish src/GameLibrary.App -c Release --no-restore --self-contained false -o $publishDirectory --nologo
+    # Remove old multi-file output before switching to the bundled release layout.
+    $artifactRoot = [IO.Path]::GetFullPath((Join-Path $RepositoryRoot 'artifacts'))
+    $publishDirectory = [IO.Path]::GetFullPath($publishDirectory)
+    if (-not $publishDirectory.StartsWith($artifactRoot + '\', [StringComparison]::OrdinalIgnoreCase)) {
+        throw 'Publish directory must be inside artifacts.'
+    }
+    $active = Get-Process GameLibrary -ErrorAction SilentlyContinue | Where-Object {
+        $_.Path -and $_.Path.StartsWith($publishDirectory + '\', [StringComparison]::OrdinalIgnoreCase)
+    }
+    if ($active) { throw 'Exit the published app before publishing this version again.' }
+    if (Test-Path -LiteralPath $publishDirectory) {
+        if ((Get-Item -LiteralPath $publishDirectory).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+            throw 'Publish directory must not be a link.'
+        }
+        Remove-Item -LiteralPath $publishDirectory -Recurse -Force
+    }
+    & $sdk publish src/GameLibrary.App -c Release -r win-x64 --self-contained false -o $publishDirectory --nologo -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=none -p:DebugSymbols=false -p:RestoreConfigFile="$RepositoryRoot\NuGet.Config"
     if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }
     # Archive the directory contents so GameLibrary.exe is at the ZIP root.
     $archivePath = $publishDirectory + '.zip'
